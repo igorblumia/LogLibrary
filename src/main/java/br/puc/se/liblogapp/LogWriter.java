@@ -8,6 +8,7 @@ package br.puc.se.liblogapp;
 import br.puc.se.liblogapp.datawriter.DataBase;
 import br.puc.se.liblogapp.datawriter.IOWriter;
 import br.puc.se.liblogapp.datawriter.NetRequest;
+import java.util.Date;
 
 public class LogWriter {
     
@@ -15,70 +16,49 @@ public class LogWriter {
     
     public LogWriter()
     {       
+        this.log = new LogAux();
     }
     
-    public Boolean LogWrite(LogAux log)
+    public void log(String message, int level)
     {
-        Boolean r = false;
-        this.log = log;
-        if(log.DESTINATION == LogDestination.CONSOLE)
-        {
-            r = this.WriteLogOnConsole();
-        }
-        else if(log.DESTINATION == LogDestination.DATABASE)
-        {
-            r = this.WriteLogOnDataBase();
-        }
-        else if(log.DESTINATION == LogDestination.HTTPLOG)
-        {
-            r = this.WriteLogOnHttpPost();
-        }
-        else if(log.DESTINATION == LogDestination.IOFILE)
-        {
-            r = this.WriteLogOnFile();
-        }
-        else
-        {
-            r = false;
-        }
-        return r;
+        this.log.MESSAGE = message;
+        this.log.LEVEL = level;
+        this.log.TIMESTAMP = new Date().toString();
     }
     
-    protected Boolean WriteLogOnHttpPost()
+    public Boolean WriteLogOnHttpPost(String url)
     {
         Boolean r = false;
         NetRequest httpClient = new NetRequest();
-        httpClient.SendRequest("url", log.toString());
+        this.log.DESTINATION = LogDestination.HTTPLOG;
+        httpClient.SendRequest(url, log.toString());
         return r;
     }
     
-    protected Boolean WriteLogOnConsole()
+    public Boolean WriteLogOnConsole()
     {
         Boolean r = false;
         String result = log.toString();
+        this.log.DESTINATION = LogDestination.CONSOLE;
         System.out.println(result);
         return r;
     }
     
-    protected Boolean WriteLogOnDataBase()
+    public Boolean WriteLogOnDataBase()
     {
         Boolean r = false;
         DataBase db = new DataBase();
-        String sqlTable = "CREATE TABLE IF NOT EXISTS TabLogger (\n"
-                     + "	id integer PRIMARY KEY,\n"
-                     + "	LOGTIME text NOT NULL,\n"
-                     + "	LEVEL integer,\n"
-                     + "	MESSAGE text NOT NULL\n"
-                     + ");";;
+        this.log.DESTINATION = LogDestination.DATABASE;
         String sqlRegister = "INSERT INTO TabLogger ('LOGTIME','LEVEL','MESSAGE') VALUES('"+log.TIMESTAMP+"',"+log.LEVEL+",'"+log.MESSAGE+"')";
         db.StartDataBase();
         db.InsertRegister(sqlRegister);
         return r;
     }
     
-    protected Boolean WriteLogOnFile()
+    public Boolean WriteLogOnFile(String name)
     {
         Boolean r = false;
+        this.log.DESTINATION = LogDestination.IOFILE;
         r = new IOWriter().WriteFile(log.toString());
         return r;
     }
