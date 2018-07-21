@@ -20,7 +20,10 @@ import static org.junit.Assert.*;
  */
 public class LogWriterTest {
     
+    public LogWriter instance;
+    
     public LogWriterTest() {
+        instance = new LogWriter();
     }
     
     @BeforeClass
@@ -45,14 +48,11 @@ public class LogWriterTest {
     @DisplayName("Test LogWrite for Console Output...")
     @Test
     public void testLogWrite() {
-        LogAux log = new LogAux();
-        log.MESSAGE = "The tests result is completed and successful...";
-        log.LEVEL = "1";
-        log.TIMESTAMP = LocalDateTime.now().toString();
-        log.DESTINATION = LogDestination.CONSOLE;
-        LogWriter instance = new LogWriter();
+        String message = "The tests result is completed and successful...";
+        int level = 1;
         Boolean expResult = false;
-        Boolean result = instance.LogWrite(log);
+        instance.log(message,level);
+        Boolean result = instance.WriteLogOnConsole();
         assertEquals(expResult, result);
         //fail("The test case is a prototype.");
         System.out.println("LogWrite to Console is successful...");
@@ -61,14 +61,11 @@ public class LogWriterTest {
     @DisplayName("Ex2: Can I use the LibLogApp to write to File[temp.txt]?")
     @Test
     public void testLogWritteToFile() {
-        LogAux log = new LogAux();
-        log.MESSAGE = "The tests result is completed and successful...";
-        log.LEVEL = "1";
-        log.TIMESTAMP = LocalDateTime.now().toString();
-        log.DESTINATION = LogDestination.IOFILE;
-        LogWriter instance = new LogWriter();
+        String message = "The tests result is completed and successful...";
+        int level = 1;
         Boolean expResult = false;
-        Boolean result = instance.LogWrite(log);
+        instance.log(message,level);
+        Boolean result = instance.WriteLogOnFile("log.txt");
         assertEquals(expResult, result);
         //fail("The test case is a prototype.");
         System.out.println("LogWrite to File is successful...");
@@ -77,14 +74,11 @@ public class LogWriterTest {
     @DisplayName("Ex2: Can I use the LibLogApp to write to Database?")
     @Test
     public void testLogWritteToDatabase() {
-        LogAux log = new LogAux();
-        log.MESSAGE = "The tests result is completed and succefuly.";
-        log.LEVEL = "1";
-        log.TIMESTAMP = LocalDateTime.now().toString();
-        log.DESTINATION = LogDestination.DATABASE;
-        LogWriter instance = new LogWriter();
+        String message = "The tests result is completed and successful...";
+        int level = 1;
         Boolean expResult = false;
-        Boolean result = instance.LogWrite(log);
+        instance.log(message,level);
+        Boolean result = instance.WriteLogOnDataBase();
         assertEquals(expResult, result);
         //fail("The test case is a prototype.");
         System.out.println("LogWrite to Database is successful...");
@@ -93,14 +87,11 @@ public class LogWriterTest {
     @DisplayName("Ex2: Can I use the LibLogApp to write to Http Webservice?")
     @Test
     public void testLogWritteToHttpService() {
-        LogAux log = new LogAux();
-        log.MESSAGE = "The tests result is completed and succefuly.";
-        log.LEVEL = "1";
-        log.TIMESTAMP = LocalDateTime.now().toString();
-        log.DESTINATION = LogDestination.HTTPLOG;
-        LogWriter instance = new LogWriter();
+        String message = "The tests result is completed and successful...";
+        int level = 1;
         Boolean expResult = false;
-        Boolean result = instance.LogWrite(log);
+        instance.log(message,level);
+        Boolean result = instance.WriteLogOnHttpPost("url");
         assertEquals(expResult, result);
         //fail("The test case is a prototype.");
         System.out.println("LogWrite to Http Webservice is successful...");
