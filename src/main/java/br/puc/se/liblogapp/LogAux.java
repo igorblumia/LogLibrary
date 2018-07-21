@@ -8,7 +8,7 @@ package br.puc.se.liblogapp;
 public class LogAux {
     
     public String TIMESTAMP = "";
-    public String LEVEL = "";
+    public int LEVEL = 0;
     public String MESSAGE = "";
     public String DESTINATION = "";
     public String LOGGERNAME = "";
